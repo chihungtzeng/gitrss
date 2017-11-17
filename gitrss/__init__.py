@@ -4,8 +4,10 @@ Handles high level queries over a git repository.
 from __future__ import print_function, absolute_import
 import os
 import time
+import datetime
 import git
 from jinja2 import Template
+from .rfeed import Item, Feed
 from . import shell_util
 from . import html_helper
 from . import unified_diff
@@ -68,39 +70,29 @@ class GitRepo(object):
         """
         return message.splitlines()[0]
 
-    def _get_rss_entry(self, commit):
+    def _gen_feed_item(self, commit):
         """
         Return a dict that represents an rss entry. See
         data/rss_template.xml for the dict fields.
         """
-        escape = html_helper.escape_html_char
-        entry = {}
-        entry["title"] = escape(self._get_subject(commit.message))
-
-        entry["link"] = "http://"
-
-        # title, description, and content:encoded are wrapped by CDATA
-        # so we don't need to escape html chars.
-        date = time.asctime(time.gmtime(commit.committed_date))
-        description = (u"<p>Commit: " + commit.hexsha + "</p>"
-                       u"<p>Author: " + commit.author.name + "</p>"
-                       u"<p>Date: " + date + "</p>")
-        entry["description"] = description
         diff = self.get_unified_diff(commit.hexsha)
-        entry["content"] = unified_diff.GitPatch(diff).format_to_html()
-        return entry
+        feed_item = Item(
+            title=self._get_subject(commit.message),
+            author=commit.author.name,
+            pubDate=datetime.datetime.fromtimestamp(commit.committed_date),
+            description=unified_diff.GitPatch(diff).format_to_html())
+        return feed_item
 
     def to_rss(self):
         """
         Generate rss contents.
         """
-        channel = {
-            "title": self.repo_name,
-            "link": "file://",
-            "description": "Rss entries for {}".format(self.repo_name)
-        }
-        entries = []
-        for commit in self.recent_commits:
-            entries.append(self._get_rss_entry(commit))
-
-        return html_helper.gen_rss_contents(channel, entries)
+        feed_items = [self._gen_feed_item(_) for _ in self.recent_commits]
+        feed = Feed(
+            title=self.repo_name,
+            link="http://",
+            description="Rss entries for {}".format(self.repo_name),
+            language="zh-TW",
+            lastBuildDate=datetime.datetime.now(),
+            items=feed_items)
+        return unicode(feed.rss())
