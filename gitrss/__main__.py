@@ -32,10 +32,10 @@ def main():
     """
     parser = argparse.ArgumentParser(
         description="Create RSS feed for a git repository")
-    parser.add_argument("--repo-path", required=True)
+    parser.add_argument("--repo", required=True)
     parser.add_argument("--output-file", default="rss.xml")
     args = parser.parse_args()
-    gen_rss(args.repo_path, args.output_file)
+    gen_rss(args.repo, args.output_file)
 
 
 if __name__ == "__main__":
