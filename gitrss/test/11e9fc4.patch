@@ -1,0 +1,364 @@
+diff --git a/html_helper.py b/html_helper.py
+index 1a23616..c522028 100644
+--- a/html_helper.py
++++ b/html_helper.py
+@@ -9,13 +9,13 @@ def replace_lt_gt(text):
+     of the html syntax.
+     """
+     ret = []
+-    for c in text:
+-        if c == "<":
++    for char in text:
++        if char == "<":
+             ret.append("&lt;")
+-        elif c == ">":
++        elif char == ">":
+             ret.append("&gt;")
+         else:
+-            ret.append(c)
++            ret.append(char)
+     return "".join(ret)
+ 
+ 
+diff --git a/tests/multiline-diff-external-css-expect.html b/tests/multiline-diff-external-css-expect.html
+new file mode 100644
+index 0000000..3c3fdb4
+--- /dev/null
++++ b/tests/multiline-diff-external-css-expect.html
+@@ -0,0 +1,20 @@
++<div>@@ -1,3 +1,4 @@</div>
++<table class="ud_table">
++<tbody>
++<tr>
++<td class="ud_lineno">1</td><td class="ud_neutral"> python</td><td class="ud_lineno">1</td><td class="ud_neutral"> python</td>
++</tr>
++<tr>
++<td class="ud_lineno">2</td><td class="ud_minus">-ham</td><td class="ud_lineno">2</td><td class="ud_plus">+hamster</td>
++</tr>
++<tr>
++<td></td><td></td><td class="ud_lineno">3</td><td class="ud_plus">+kola</td>
++</tr>
++<tr>
++<td class="ud_lineno">3</td><td class="ud_neutral"> guido</td><td class="ud_lineno">4</td><td class="ud_neutral"> guido</td>
++</tr>
++<tr>
++<td></td><td></td><td></td><td></td>
++</tr>
++</tbody>
++</table>
+\ No newline at end of file
+diff --git a/tests/oneline-diff-expect.html b/tests/oneline-diff-expect.html
+index a21b3fb..85bbc21 100644
+--- a/tests/oneline-diff-expect.html
++++ b/tests/oneline-diff-expect.html
+@@ -26,4 +26,4 @@
+ <td></td><td></td><td></td><td></td>
+ </tr>
+ </tbody>
+-</table>
++</table>
+\ No newline at end of file
+diff --git a/tests/oneline-diff-external-css-expect.html b/tests/oneline-diff-external-css-expect.html
+new file mode 100644
+index 0000000..11a92bf
+--- /dev/null
++++ b/tests/oneline-diff-external-css-expect.html
+@@ -0,0 +1,29 @@
++<div>@@ -30,7 +30,7 @@</div>
++<table class="ud_table">
++<tbody>
++<tr>
++<td class="ud_lineno">30</td><td class="ud_neutral"> }</td><td class="ud_lineno">30</td><td class="ud_neutral"> }</td>
++</tr>
++<tr>
++<td class="ud_lineno">31</td><td class="ud_neutral"> </td><td class="ud_lineno">31</td><td class="ud_neutral"> </td>
++</tr>
++<tr>
++<td class="ud_lineno">32</td><td class="ud_neutral"> void BindingEnv::AddRule(const Rule* rule) {</td><td class="ud_lineno">32</td><td class="ud_neutral"> void BindingEnv::AddRule(const Rule* rule) {</td>
++</tr>
++<tr>
++<td class="ud_lineno">33</td><td class="ud_minus">-  assert(LookupRule(rule-&gt;name()) == NULL);</td><td class="ud_lineno">33</td><td class="ud_plus">+  assert(LookupRuleCurrentScope(rule-&gt;name()) == NULL);</td>
++</tr>
++<tr>
++<td class="ud_lineno">34</td><td class="ud_neutral">   rules_[rule-&gt;name()] = rule;</td><td class="ud_lineno">34</td><td class="ud_neutral">   rules_[rule-&gt;name()] = rule;</td>
++</tr>
++<tr>
++<td class="ud_lineno">35</td><td class="ud_neutral"> }</td><td class="ud_lineno">35</td><td class="ud_neutral"> }</td>
++</tr>
++<tr>
++<td class="ud_lineno">36</td><td class="ud_neutral"> </td><td class="ud_lineno">36</td><td class="ud_neutral"> </td>
++</tr>
++<tr>
++<td></td><td></td><td></td><td></td>
++</tr>
++</tbody>
++</table>
+\ No newline at end of file
+diff --git a/unified_diff.py b/unified_diff.py
+index ebbd1fb..773209b 100644
+--- a/unified_diff.py
++++ b/unified_diff.py
+@@ -6,7 +6,6 @@ from __future__ import print_function
+ import html_helper
+ import re
+ import sys
+-import pdb
+ 
+ 
+ class UnifiedDiffTrunk(object):
+@@ -22,7 +21,10 @@ class UnifiedDiffTrunk(object):
+             sys.exit(1)
+ 
+     def line_info(self):
+-        line_pos = r"[" + re.escape("+-") + r"]\d+"
++        """
++        Return: the line info with heading and trailing @@
++        @@ from-file-line-numbers to-file-line-numbers @@
++        """
+         reg = re.compile(r"(?P<chunk_header>@@ .* @@)")
+         for line in self.trunk:
+             match = reg.match(line)
+@@ -59,9 +61,25 @@ class UnifiedDiffTrunk(object):
+             return self._format_to_html_inline_css()
+ 
+     def _format_to_html_external_css(self):
+-        """Produce html with external css style."""
+-        ret = []
+-        return "".join(ret)
++        """Produce html with external css style, two-side layout.
++
++        Note: Users need to supply his/her css file, where the following
++              class are defined:
++
++              ud_table: Table style.
++              ud_lineno: Line number style.
++              ud_neutral: The style for unchanged lines.
++              ud_minus: The style for deleted lines in the old revision.
++              ud_plus: The style for added lines in the new revision.
++        """
++        table_attrs = {"class": "ud_table"}
++        lineno_attrs = {"class": "ud_lineno"}
++        plus_attrs = {"class": "ud_plus"}
++        minus_attrs = {"class": "ud_minus"}
++        neutral_attrs = {"class": "ud_neutral"}
++        return self._format_to_html_general(table_attrs, lineno_attrs,
++                                            neutral_attrs, minus_attrs,
++                                            plus_attrs)
+ 
+     def _format_to_html_inline_css(self):
+         """Produce html with inline css style, two-side layout.
+@@ -75,32 +93,42 @@ class UnifiedDiffTrunk(object):
+             "style": ("white-space: pre-wrap; "
+                       "font-family: Courier New, Courier, monospace; ")
+             }
+-        td_attrs_plus = {"style": "background-color: yellowgreen; width: 45%"
+-        }
+-        td_attrs_minus = {"style": "background-color: pink; width: 45%"
+-        }
+-        td_attrs_neutral = {"style": "background-color: inherit; width: 45%"
+-        }
+-
++        lineno_attrs = {"style": ("background-color: lightgray; "
++                                  "text-align: right;")}
++        neutral_attrs = {"style": ("background-color: inherit; "
++                                   "width: 45%")}
++        minus_attrs = {"style": "background-color: pink; width: 45%"}
++        plus_attrs = {"style": ("background-color: yellowgreen; "
++                                "width: 45%")}
++
++        return self._format_to_html_general(table_attrs, lineno_attrs,
++                                            neutral_attrs, minus_attrs,
++                                            plus_attrs)
++
++
++    def _format_to_html_general(self, table_attrs, lineno_attrs,
++                                neutral_attrs, minus_attrs, plus_attrs):
++        """General method to produce diff table. The css styles are given by
++        callers.
++        """
+         lineno_old, len_old, lineno_new, len_new = self.diff_at()
+         lineno_old = abs(lineno_old)
+         lineno_new = abs(lineno_new)
+-        empty_row = ["<td></td>" for i in range(4)]
+-        rows = [["<td></td>" for i in range(4)]
+-                for j in range(max(len_old, len_new)+1)]
++        rows = [["<td></td>" for _ in range(4)]
++                for _ in range(max(len_old, len_new)+1)]
+         row_old = 0
+         row_new = 0
+ 
+         for line in self.trunk:
+             tline = html_helper.replace_lt_gt(line)
++            lblock_old = html_helper.td_block(str(lineno_old), lineno_attrs)
++            lblock_new = html_helper.td_block(str(lineno_new), lineno_attrs)
+             if len(line) <= 0:
+                 pass
+             elif line[0] == " ":
+                 row_old = max(row_old, row_new)
+                 row_new = row_old
+-                tblock = html_helper.td_block([tline], td_attrs_neutral)
+-                lblock_old = self._td_block_lineno(lineno_old)
+-                lblock_new = self._td_block_lineno(lineno_new)
++                tblock = html_helper.td_block([tline], neutral_attrs)
+                 rows[row_old][0] = lblock_old
+                 rows[row_old][1] = tblock
+                 rows[row_new][2] = lblock_new
+@@ -110,15 +138,13 @@ class UnifiedDiffTrunk(object):
+                 row_old += 1
+                 row_new += 1
+             elif line[0] == "-":
+-                lblock_old = self._td_block_lineno(lineno_old)
+-                tblock = html_helper.td_block([tline], td_attrs_minus)
++                tblock = html_helper.td_block([tline], minus_attrs)
+                 rows[row_old][0] = lblock_old
+                 rows[row_old][1] = tblock
+                 lineno_old += 1
+                 row_old += 1
+             elif line[0] == "+":
+-                lblock_new = self._td_block_lineno(lineno_new)
+-                tblock = html_helper.td_block([tline], td_attrs_plus)
++                tblock = html_helper.td_block([tline], plus_attrs)
+                 rows[row_new][2] = lblock_new
+                 rows[row_new][3] = tblock
+                 lineno_new += 1
+@@ -134,11 +160,6 @@ class UnifiedDiffTrunk(object):
+                  html_helper.close_tag("table")]
+         return "\n".join(html)
+ 
+-    def _td_block_lineno(self, lineno):
+-        td_attrs_lineno = {"style": "background-color: lightgray; text-align: right;",
+-                           }
+-        return html_helper.td_block([str(lineno)], td_attrs_lineno)
+-
+ 
+ class UnifiedDiff(object):
+     """
+@@ -180,7 +201,7 @@ class UnifiedDiff(object):
+         --- a/src/eval_env.cc
+         +++ b/src/eval_env.cc
+         """
+-        reg = re.compile("--- a/(?P<file_name>.+)")
++        reg = re.compile("%s b/(?P<file_name>.+)" % (re.escape("+++")))
+         for line in self.diff:
+             match = reg.match(line)
+             if match:
+diff --git a/unified_diff_ut.py b/unified_diff_ut.py
+index a3be2ff..c1d8bb4 100644
+--- a/unified_diff_ut.py
++++ b/unified_diff_ut.py
+@@ -4,20 +4,44 @@ import os
+ import unittest
+ 
+ 
+-def read_file_contents(fullpath):
+-    with file(fullpath) as fp:
++OVERWRITE_EXPECTED = False
++
++
++def read_file_contents(full_path):
++    if not os.path.isfile(full_path):
++        print("File not exist: " + full_path)
++        return ""
++    with file(full_path) as fp:
+         contents = fp.read()
+     return contents
+ 
+ 
++def write_file_if_necessary(full_path, contents):
++    if not OVERWRITE_EXPECTED:
++        return
++    if os.path.isfile(full_path):
++        print("WARNING: Write to an existent file " + full_path)
++
++    with file(full_path, "w") as fp:
++        fp.write(contents)
++
++
+ def get_input_trunk(tests_dir, basename):
+     test_file = os.path.join(tests_dir, basename + ".trunk")
+     return read_file_contents(test_file)
+ 
+ 
+-def get_expected_html_from_trunk(tests_dir, basename):
+-    expected_file = os.path.join(tests_dir, basename + "-expect.html")
+-    return read_file_contents(expected_file)
++def expected_filename(tests_dir, basename, external_css=False):
++    if external_css:
++        filename = basename + "-external-css-expect.html"
++    else:
++        filename = basename + "-expect.html"
++    return os.path.join(tests_dir, filename)
++
++
++def get_expected_html_from_trunk(tests_dir, basename, external_css=False):
++    full_path = expected_filename(tests_dir, basename, external_css)
++    return read_file_contents(full_path)
+ 
+ 
+ def is_contents_equal(alex, bob):
+@@ -57,22 +81,58 @@ class UnifiedDiffTrunkTest(unittest.TestCase):
+         self.assertEqual(7, len_new)
+ 
+     def test_diff_to_html_oneline(self):
+-        trunk = get_input_trunk(self.tests_dir, "oneline-diff")
+-        expected = get_expected_html_from_trunk(self.tests_dir,
+-                                                "oneline-diff")
++        basename = "oneline-diff"
++        trunk = get_input_trunk(self.tests_dir, basename)
++        expected = get_expected_html_from_trunk(self.tests_dir, basename)
+         udt = UnifiedDiffTrunk(trunk)
+         html = udt.format_to_html(external_css=False)
+-        #print(html)
++        write_file_if_necessary(expected_filename(self.tests_dir,
++                                                  basename,
++                                                  external_css=False),
++                                html)
+         self.assertTrue(is_contents_equal(expected, html))
+ 
+-    def test_diff_to_html_multiline(self):
+-        trunk = get_input_trunk(self.tests_dir, "multiline-diff")
++    def test_diff_to_html_oneline_external_css(self):
++        basename = "oneline-diff"
++        trunk = get_input_trunk(self.tests_dir, basename)
+         expected = get_expected_html_from_trunk(self.tests_dir,
+-                                                "multiline-diff")
++                                                basename,
++                                                external_css=True)
++        udt = UnifiedDiffTrunk(trunk)
++        html = udt.format_to_html(external_css=True)
++
++        write_file_if_necessary(expected_filename(self.tests_dir,
++                                                  basename,
++                                                  external_css=True),
++                                html)
++        self.assertTrue(is_contents_equal(expected, html))
++
++    def test_diff_to_html_multiline_external_css(self):
++        basename = "multiline-diff"
++        trunk = get_input_trunk(self.tests_dir, basename)
++        expected = get_expected_html_from_trunk(self.tests_dir, basename,
++                                                external_css=True)
++        udt = UnifiedDiffTrunk(trunk)
++        html = udt.format_to_html(external_css=True)
++        write_file_if_necessary(expected_filename(self.tests_dir,
++                                                  basename,
++                                                  external_css=True),
++                                html)
++        self.assertEqual(expected, html)
++
++    def test_diff_to_html_multiline(self):
++        basename = "multiline-diff"
++        trunk = get_input_trunk(self.tests_dir, basename)
++        expected = get_expected_html_from_trunk(self.tests_dir, basename)
+         udt = UnifiedDiffTrunk(trunk)
+         html = udt.format_to_html(external_css=False)
++        write_file_if_necessary(expected_filename(self.tests_dir,
++                                                  basename,
++                                                  external_css=False),
++                                html)
+         self.assertEqual(expected, html)
+ 
++
+ class UnifiedDiffTest(unittest.TestCase):
+     def setUp(self):
+         self.tests_dir = os.path.join(__file__, "..", "tests")

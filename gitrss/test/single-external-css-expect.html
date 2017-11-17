@@ -1,0 +1,29 @@
+<div>@@ -30,7 +30,7 @@</div>
+<table class="ud_table">
+<tbody>
+<tr>
+<td class="ud_lineno">30</td><td class="ud_neutral"> }</td><td class="ud_lineno">30</td><td class="ud_neutral"> }</td>
+</tr>
+<tr>
+<td class="ud_lineno">31</td><td class="ud_neutral"> </td><td class="ud_lineno">31</td><td class="ud_neutral"> </td>
+</tr>
+<tr>
+<td class="ud_lineno">32</td><td class="ud_neutral"> void BindingEnv::AddRule(const Rule* rule) {</td><td class="ud_lineno">32</td><td class="ud_neutral"> void BindingEnv::AddRule(const Rule* rule) {</td>
+</tr>
+<tr>
+<td class="ud_lineno">33</td><td class="ud_minus">-  assert(LookupRule(rule-&gt;name()) == NULL);</td><td class="ud_lineno">33</td><td class="ud_plus">+  assert(LookupRuleCurrentScope(rule-&gt;name()) == NULL);</td>
+</tr>
+<tr>
+<td class="ud_lineno">34</td><td class="ud_neutral">   rules_[rule-&gt;name()] = rule;</td><td class="ud_lineno">34</td><td class="ud_neutral">   rules_[rule-&gt;name()] = rule;</td>
+</tr>
+<tr>
+<td class="ud_lineno">35</td><td class="ud_neutral"> }</td><td class="ud_lineno">35</td><td class="ud_neutral"> }</td>
+</tr>
+<tr>
+<td class="ud_lineno">36</td><td class="ud_neutral"> </td><td class="ud_lineno">36</td><td class="ud_neutral"> </td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td>  </td><td>  </td>
+</tr>
+</tbody>
+</table>

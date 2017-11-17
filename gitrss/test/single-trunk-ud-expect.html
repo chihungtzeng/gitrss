@@ -1,0 +1,30 @@
+<h2>src/eval_env.cc</h2>
+<div>@@ -30,7 +30,7 @@</div>
+<table border="0" style="white-space: pre-wrap; border-collapse: collapse; font-family: Courier New, Courier, monospace;" width="100%">
+<tbody>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">30</td><td style="background-color: inherit; vertical-align: top; width:47% "> }</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">30</td><td style="background-color: inherit; vertical-align: top; width:47% "> }</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">31</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">31</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">32</td><td style="background-color: inherit; vertical-align: top; width:47% "> void BindingEnv::AddRule(const Rule* rule) {</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">32</td><td style="background-color: inherit; vertical-align: top; width:47% "> void BindingEnv::AddRule(const Rule* rule) {</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">33</td><td style="background-color: pink; vertical-align: top; width:47%">-  assert(LookupRule(rule-&gt;name()) == NULL);</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">33</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+  assert(LookupRuleCurrentScope(rule-&gt;name()) == NULL);</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">34</td><td style="background-color: inherit; vertical-align: top; width:47% ">   rules_[rule-&gt;name()] = rule;</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">34</td><td style="background-color: inherit; vertical-align: top; width:47% ">   rules_[rule-&gt;name()] = rule;</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">35</td><td style="background-color: inherit; vertical-align: top; width:47% "> }</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">35</td><td style="background-color: inherit; vertical-align: top; width:47% "> }</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">36</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">36</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td>  </td><td>  </td>
+</tr>
+</tbody>
+</table>

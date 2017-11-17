@@ -1,0 +1,458 @@
+<dl><dt>Commit: 6ee1804</dt>
+<dd>Author: "clark tseng"
+</dd>
+<dd>Date: "2016-01-26 19:50:41 +0800"
+</dd>
+<dd>Message: "format a given git commit to side-by-side diff
+"
+</dd>
+</dl>
+<h2>git_commit.py</h2>
+<div>@@ -1,9 +1,11 @@</div>
+<table border="0" style="white-space: pre-wrap; border-collapse: collapse; font-family: Courier New, Courier, monospace;" width="100%">
+<tbody>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">1</td><td style="background-color: inherit; vertical-align: top; width:47% "> """</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">1</td><td style="background-color: inherit; vertical-align: top; width:47% "> """</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">2</td><td style="background-color: inherit; vertical-align: top; width:47% "> Get git log and unified diff for a given commit.</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">2</td><td style="background-color: inherit; vertical-align: top; width:47% "> Get git log and unified diff for a given commit.</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">3</td><td style="background-color: inherit; vertical-align: top; width:47% "> """</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">3</td><td style="background-color: inherit; vertical-align: top; width:47% "> """</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">4</td><td style="background-color: inherit; vertical-align: top; width:47% "> from __future__ import print_function</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">4</td><td style="background-color: inherit; vertical-align: top; width:47% "> from __future__ import print_function</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">5</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+import html_helper</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">6</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+import unified_diff</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">5</td><td style="background-color: inherit; vertical-align: top; width:47% "> import subprocess</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">7</td><td style="background-color: inherit; vertical-align: top; width:47% "> import subprocess</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">6</td><td style="background-color: inherit; vertical-align: top; width:47% "> import sys</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">8</td><td style="background-color: inherit; vertical-align: top; width:47% "> import sys</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">7</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">9</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">8</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">10</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">9</td><td style="background-color: inherit; vertical-align: top; width:47% "> def _run_command(cmd):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">11</td><td style="background-color: inherit; vertical-align: top; width:47% "> def _run_command(cmd):</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td>  </td><td>  </td>
+</tr>
+</tbody>
+</table>
+
+<div>@@ -21,12 +23,12 @@</div>
+<table border="0" style="white-space: pre-wrap; border-collapse: collapse; font-family: Courier New, Courier, monospace;" width="100%">
+<tbody>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">21</td><td style="background-color: inherit; vertical-align: top; width:47% ">     """Use this class to retrive related info regarding a git commit.</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">23</td><td style="background-color: inherit; vertical-align: top; width:47% ">     """Use this class to retrive related info regarding a git commit.</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">22</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">24</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">23</td><td style="background-color: inherit; vertical-align: top; width:47% ">     The __init__ method needs a string that identified a commit. The string</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">25</td><td style="background-color: inherit; vertical-align: top; width:47% ">     The __init__ method needs a string that identified a commit. The string</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">24</td><td style="background-color: inherit; vertical-align: top; width:47% ">     can be a sha1 or "HEAD" etc.</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">26</td><td style="background-color: inherit; vertical-align: top; width:47% ">     can be a sha1 or "HEAD" etc.</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">25</td><td style="background-color: inherit; vertical-align: top; width:47% ">     """</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">27</td><td style="background-color: inherit; vertical-align: top; width:47% ">     """</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">26</td><td style="background-color: pink; vertical-align: top; width:47%">-    def __init__(self, commit_id):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">28</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+    def __init__(self, sha1):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">27</td><td style="background-color: pink; vertical-align: top; width:47%">-        self.sha1 = commit_id</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">29</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        self.sha1 = sha1</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">28</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.author = None</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">30</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.author = None</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">29</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.commit_date = None</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">31</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.commit_date = None</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">30</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.raw_body = None</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">32</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.raw_body = None</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">31</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.subject = None</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">33</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.subject = None</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">32</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.unified_diff = None</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">34</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.unified_diff = None</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td>  </td><td>  </td>
+</tr>
+</tbody>
+</table>
+
+<div>@@ -35,11 +37,11 @@</div>
+<table border="0" style="white-space: pre-wrap; border-collapse: collapse; font-family: Courier New, Courier, monospace;" width="100%">
+<tbody>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">35</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """Return the author of the commit."""</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">37</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """Return the author of the commit."""</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">36</td><td style="background-color: inherit; vertical-align: top; width:47% ">         if not self.author:</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">38</td><td style="background-color: inherit; vertical-align: top; width:47% ">         if not self.author:</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">37</td><td style="background-color: inherit; vertical-align: top; width:47% ">             self.author = self._get_git_info(log_format="%aN")</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">39</td><td style="background-color: inherit; vertical-align: top; width:47% ">             self.author = self._get_git_info(log_format="%aN")</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">38</td><td style="background-color: inherit; vertical-align: top; width:47% ">         return self.author</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">40</td><td style="background-color: inherit; vertical-align: top; width:47% ">         return self.author</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">39</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">41</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">40</td><td style="background-color: pink; vertical-align: top; width:47%">-    def get_commit_date(self):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">42</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+    def get_date(self):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">41</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """Return the date of the commit."""</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">43</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """Return the date of the commit."""</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">42</td><td style="background-color: inherit; vertical-align: top; width:47% ">         if not self.commit_date:</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">44</td><td style="background-color: inherit; vertical-align: top; width:47% ">         if not self.commit_date:</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">43</td><td style="background-color: inherit; vertical-align: top; width:47% ">             self.commit_date = self._get_git_info(log_format="%ci")</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">45</td><td style="background-color: inherit; vertical-align: top; width:47% ">             self.commit_date = self._get_git_info(log_format="%ci")</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">44</td><td style="background-color: inherit; vertical-align: top; width:47% ">         return self.commit_date</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">46</td><td style="background-color: inherit; vertical-align: top; width:47% ">         return self.commit_date</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">45</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">47</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td>  </td><td>  </td>
+</tr>
+</tbody>
+</table>
+
+<div>@@ -63,11 +65,11 @@</div>
+<table border="0" style="white-space: pre-wrap; border-collapse: collapse; font-family: Courier New, Courier, monospace;" width="100%">
+<tbody>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">63</td><td style="background-color: inherit; vertical-align: top; width:47% ">         Returns:</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">65</td><td style="background-color: inherit; vertical-align: top; width:47% ">         Returns:</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">64</td><td style="background-color: inherit; vertical-align: top; width:47% ">             A string of unified diff, with 5 lines preceding and following</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">66</td><td style="background-color: inherit; vertical-align: top; width:47% ">             A string of unified diff, with 5 lines preceding and following</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">65</td><td style="background-color: inherit; vertical-align: top; width:47% ">             the diff lines in order to give reader the context information.</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">67</td><td style="background-color: inherit; vertical-align: top; width:47% ">             the diff lines in order to give reader the context information.</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">66</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">68</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">67</td><td style="background-color: inherit; vertical-align: top; width:47% ">         if not self.unified_diff:</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">69</td><td style="background-color: inherit; vertical-align: top; width:47% ">         if not self.unified_diff:</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">68</td><td style="background-color: pink; vertical-align: top; width:47%">-            cmd = ["git", "diff", "-U5", self.sha1 + "^"]</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">70</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+            cmd = ["git", "diff", "-U5", self.sha1 + "^", self.sha1]</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">69</td><td style="background-color: inherit; vertical-align: top; width:47% ">             self.unified_diff = _run_command(cmd)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">71</td><td style="background-color: inherit; vertical-align: top; width:47% ">             self.unified_diff = _run_command(cmd)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">70</td><td style="background-color: inherit; vertical-align: top; width:47% ">         return self.unified_diff</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">72</td><td style="background-color: inherit; vertical-align: top; width:47% ">         return self.unified_diff</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">71</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">73</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">72</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def _get_git_info(self, log_format=None):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">74</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def _get_git_info(self, log_format=None):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">73</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """Use git command to return the info regarding the commit.</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">75</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """Use git command to return the info regarding the commit.</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td>  </td><td>  </td>
+</tr>
+</tbody>
+</table>
+
+<div>@@ -81,5 +83,28 @@</div>
+<table border="0" style="white-space: pre-wrap; border-collapse: collapse; font-family: Courier New, Courier, monospace;" width="100%">
+<tbody>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">81</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">83</td><td style="background-color: inherit; vertical-align: top; width:47% ">         """</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">82</td><td style="background-color: inherit; vertical-align: top; width:47% ">         cmd = ["git", "log", "-n", "1",</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">84</td><td style="background-color: inherit; vertical-align: top; width:47% ">         cmd = ["git", "log", "-n", "1",</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">83</td><td style="background-color: inherit; vertical-align: top; width:47% ">                "--format=\"" + log_format + "\"", self.sha1]</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">85</td><td style="background-color: inherit; vertical-align: top; width:47% ">                "--format=\"" + log_format + "\"", self.sha1]</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">84</td><td style="background-color: inherit; vertical-align: top; width:47% ">         return _run_command(cmd)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">86</td><td style="background-color: inherit; vertical-align: top; width:47% ">         return _run_command(cmd)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">85</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">87</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">88</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+    def _to_description_list(self):</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">89</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        """Format the git commit into html description list, that is, &lt;dl&gt;,</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">90</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        &lt;dt&gt; and &lt;dd&gt; blocks. The layout is:</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">91</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">92</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        Commit: &lt;sha1&gt;</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">93</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+            Author: &lt;author&gt;</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">94</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+            Date: &lt;date&gt;</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">95</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+            Message: &lt;message&gt;</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">96</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        """</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">97</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">98</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        dcpt = [html_helper.tag_block("dt", "Commit: " + self.sha1),</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">99</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+                html_helper.tag_block("dd", "Author: " + self.get_author()),</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">100</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+                html_helper.tag_block("dd", "Date: " + self.get_date()),</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">101</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+                html_helper.tag_block("dd", "Message: " + self.get_raw_body()), ""]</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">102</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        return html_helper.tag_block("dl", "\n".join(dcpt))</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">103</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">104</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+    def format_to_html(self):</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">105</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        """Format the git commit with description list and side-by-side diff.</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">106</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        """</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">107</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        diff = self.get_unified_diff()</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">108</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        ret = [self._to_description_list(),</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">109</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+               unified_diff.GitPatch(diff).format_to_html()]</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">110</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        return "\n".join(ret)</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td>  </td><td>  </td>
+</tr>
+</tbody>
+</table>
+
+<h2>git_commit_ut.py</h2>
+<div>@@ -1,40 +1,42 @@</div>
+<table border="0" style="white-space: pre-wrap; border-collapse: collapse; font-family: Courier New, Courier, monospace;" width="100%">
+<tbody>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">1</td><td style="background-color: inherit; vertical-align: top; width:47% "> from __future__ import print_function</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">1</td><td style="background-color: inherit; vertical-align: top; width:47% "> from __future__ import print_function</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">2</td><td style="background-color: inherit; vertical-align: top; width:47% "> from git_commit import *</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">2</td><td style="background-color: inherit; vertical-align: top; width:47% "> from git_commit import *</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">3</td><td style="background-color: inherit; vertical-align: top; width:47% "> import unittest</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">3</td><td style="background-color: inherit; vertical-align: top; width:47% "> import unittest</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">4</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">4</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">5</td><td style="background-color: pink; vertical-align: top; width:47%">-HEAD_LOG = []</td><td>  </td><td>  </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">6</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">5</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">7</td><td style="background-color: inherit; vertical-align: top; width:47% "> class GitObjectTest(unittest.TestCase):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">6</td><td style="background-color: inherit; vertical-align: top; width:47% "> class GitObjectTest(unittest.TestCase):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">8</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def setUp(self):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">7</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def setUp(self):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">9</td><td style="background-color: pink; vertical-align: top; width:47%">-        self.gc = GitCommit("HEAD")</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">8</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        self.gc = GitCommit("fa86dbb")</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">10</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">9</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">11</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def test_get_author(self):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">10</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def test_get_author(self):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">12</td><td style="background-color: inherit; vertical-align: top; width:47% ">         ret = self.gc.get_author()</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">11</td><td style="background-color: inherit; vertical-align: top; width:47% ">         ret = self.gc.get_author()</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">13</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">12</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">14</td><td style="background-color: pink; vertical-align: top; width:47%">-        HEAD_LOG.append("author:\n" + ret)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">13</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        self.assertNotEqual("", ret)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">15</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">14</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">16</td><td style="background-color: pink; vertical-align: top; width:47%">-    def test_get_commit_date(self):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">15</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+    def test_get_date(self):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">17</td><td style="background-color: pink; vertical-align: top; width:47%">-        ret = self.gc.get_commit_date()</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">16</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        ret = self.gc.get_date()</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">18</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">17</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">19</td><td style="background-color: pink; vertical-align: top; width:47%">-        HEAD_LOG.append("commit date:\n" + ret)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">18</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        self.assertNotEqual("", ret)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">20</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">19</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">21</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def test_get_raw_body(self):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">20</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def test_get_raw_body(self):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">22</td><td style="background-color: inherit; vertical-align: top; width:47% ">         ret = self.gc.get_raw_body()</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">21</td><td style="background-color: inherit; vertical-align: top; width:47% ">         ret = self.gc.get_raw_body()</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">23</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">22</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">24</td><td style="background-color: pink; vertical-align: top; width:47%">-        HEAD_LOG.append("raw body:\n" + ret)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">23</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        self.assertNotEqual("", ret)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">25</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">24</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">26</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def test_get_subject(self):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">25</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def test_get_subject(self):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">27</td><td style="background-color: inherit; vertical-align: top; width:47% ">         ret = self.gc.get_subject()</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">26</td><td style="background-color: inherit; vertical-align: top; width:47% ">         ret = self.gc.get_subject()</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">28</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">27</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">29</td><td style="background-color: pink; vertical-align: top; width:47%">-        HEAD_LOG.append("subject:\n" + ret)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">28</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        self.assertNotEqual("", ret)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">30</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">29</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">31</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def test_get_unified_diff(self):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">30</td><td style="background-color: inherit; vertical-align: top; width:47% ">     def test_get_unified_diff(self):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">32</td><td style="background-color: inherit; vertical-align: top; width:47% ">         ret = self.gc.get_unified_diff()</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">31</td><td style="background-color: inherit; vertical-align: top; width:47% ">         ret = self.gc.get_unified_diff()</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">33</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">32</td><td style="background-color: inherit; vertical-align: top; width:47% ">         self.assertIsInstance(ret, basestring)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">34</td><td style="background-color: pink; vertical-align: top; width:47%">-        HEAD_LOG.append("unified diff:\n" + ret)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">33</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        self.assertNotEqual("", ret)</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">34</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">35</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+    def test_description_list(self):</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">36</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        html = self.gc.format_to_html()</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">37</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+        self.assertNotEqual("", html)</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">38</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">35</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">39</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">36</td><td style="background-color: inherit; vertical-align: top; width:47% "> if __name__ == "__main__":</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">40</td><td style="background-color: inherit; vertical-align: top; width:47% "> if __name__ == "__main__":</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">37</td><td style="background-color: inherit; vertical-align: top; width:47% ">     suite = unittest.TestLoader().loadTestsFromTestCase(GitObjectTest)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">41</td><td style="background-color: inherit; vertical-align: top; width:47% ">     suite = unittest.TestLoader().loadTestsFromTestCase(GitObjectTest)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">38</td><td style="background-color: inherit; vertical-align: top; width:47% ">     unittest.TextTestRunner(verbosity=2).run(suite)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">42</td><td style="background-color: inherit; vertical-align: top; width:47% ">     unittest.TextTestRunner(verbosity=2).run(suite)</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">39</td><td style="background-color: pink; vertical-align: top; width:47%">-    print("-" * 40)</td><td></td><td></td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">40</td><td style="background-color: pink; vertical-align: top; width:47%">-    print("\n".join(HEAD_LOG))</td><td></td><td></td>
+</tr>
+</tbody>
+</table>
+
+<h2>unified_diff_ut.py</h2>
+<div>@@ -2,11 +2,11 @@</div>
+<table border="0" style="white-space: pre-wrap; border-collapse: collapse; font-family: Courier New, Courier, monospace;" width="100%">
+<tbody>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">2</td><td style="background-color: inherit; vertical-align: top; width:47% "> from unified_diff import UnifiedDiffTrunk, UnifiedDiff, GitPatch</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">2</td><td style="background-color: inherit; vertical-align: top; width:47% "> from unified_diff import UnifiedDiffTrunk, UnifiedDiff, GitPatch</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">3</td><td style="background-color: inherit; vertical-align: top; width:47% "> import os</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">3</td><td style="background-color: inherit; vertical-align: top; width:47% "> import os</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">4</td><td style="background-color: inherit; vertical-align: top; width:47% "> import unittest</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">4</td><td style="background-color: inherit; vertical-align: top; width:47% "> import unittest</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">5</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">5</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">6</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">6</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">7</td><td style="background-color: pink; vertical-align: top; width:47%">-OVERWRITE_EXPECTED = True</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">7</td><td style="background-color: yellowgreen; vertical-align: top; width:47%">+OVERWRITE_EXPECTED = False</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">8</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">8</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">9</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">9</td><td style="background-color: inherit; vertical-align: top; width:47% "> </td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">10</td><td style="background-color: inherit; vertical-align: top; width:47% "> def read_file_contents(full_path):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">10</td><td style="background-color: inherit; vertical-align: top; width:47% "> def read_file_contents(full_path):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">11</td><td style="background-color: inherit; vertical-align: top; width:47% ">     if not os.path.isfile(full_path):</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">11</td><td style="background-color: inherit; vertical-align: top; width:47% ">     if not os.path.isfile(full_path):</td>
+</tr>
+<tr>
+<td style="background-color: lightgray; vertical-align: top; text-align: right; ">12</td><td style="background-color: inherit; vertical-align: top; width:47% ">         print("File not exist: " + full_path)</td><td style="background-color: lightgray; vertical-align: top; text-align: right; ">12</td><td style="background-color: inherit; vertical-align: top; width:47% ">         print("File not exist: " + full_path)</td>
+</tr>
+<tr>
+<td>  </td><td>  </td><td>  </td><td>  </td>
+</tr>
+</tbody>
+</table>

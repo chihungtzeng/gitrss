@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+
+<channel>
+  <title>{{channel.title}}</title>
+  <link>{{channel.link}}</link>
+  <description>{{channel.description}}</description>{% for rss_entry in rss_entries %}
+  <item>
+    <title><![CDATA[{{rss_entry.title}}]]></title>
+    <link>{{rss_entry.link}}</link>
+    <description><![CDATA[{{rss_entry.description}}]]></description>
+    <content:encoded><![CDATA[{{rss_entry.content}}]]></content:encoded>
+  </item>{% endfor %}
+</channel>
+
+</rss>
