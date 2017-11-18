@@ -9,6 +9,7 @@ from gitrss.rfeed import Item, Feed
 from gitrss import shell_util
 from gitrss import unified_diff
 from gitrss.html_helper import escape_html_char
+from gitrss.utf8_utils import to_utf8
 
 
 def _detect_repo_basedir(repo_path):
@@ -27,7 +28,10 @@ def _detect_repo_basedir(repo_path):
     raise ValueError("Not a valid git repo: {}".format(repo_path))
 
 
-class GitRepo(object):
+class GitRepoRSSGenerator(object):
+    """
+    Generate RSS feeds for a given git reposiotyr.
+    """
     def __init__(self, repo_path, repo_name=None):
         if not os.path.isabs(repo_path):
             repo_path = os.path.abspath(repo_path)
@@ -37,7 +41,7 @@ class GitRepo(object):
             self.repo_name = repo_name
         else:
             _, self.repo_name = os.path.split(self.repo_path)
-        self.recent_commits = self._get_recent_commits()
+        self.recent_commits = self.__get_recent_commits()
 
     def get_repo_name(self):
         """
@@ -45,7 +49,7 @@ class GitRepo(object):
         """
         return self.repo_name
 
-    def _get_recent_commits(self, num_commits=10):
+    def __get_recent_commits(self, num_commits=10):
         """Return the recent NUM_ENTRIES commmits, where NUM_ENTRIES is
         defined in git2rss_setting.
         """
@@ -56,18 +60,18 @@ class GitRepo(object):
                                                 max_count=num_commits))
         return recent_commits
 
-    def get_unified_diff(self, sha1):
+    def __get_unified_diff(self, sha1):
         cmd = ["git", "diff", "-U5", sha1 + "^", sha1]
         return shell_util.run_command(cmd, cwd=self.repo_path)
 
     def __get_feed_item_description(self, commit):
-        diff = self.get_unified_diff(commit.hexsha)
+        diff = self.__get_unified_diff(commit.hexsha)
         diff_in_html = unified_diff.GitPatch(diff).format_to_html()
         escaped_msg = escape_html_char(commit.message)
         text = u"<pre>{}</pre>{}".format(escaped_msg, diff_in_html)
         return text
 
-    def _gen_feed_item(self, commit):
+    def __gen_feed_item(self, commit):
         """
         Return a dict that represents an rss entry. See
         data/rss_template.xml for the dict fields.
@@ -83,7 +87,7 @@ class GitRepo(object):
         """
         Generate rss contents.
         """
-        feed_items = [self._gen_feed_item(_) for _ in self.recent_commits]
+        feed_items = [self.__gen_feed_item(_) for _ in self.recent_commits]
         feed = Feed(
             title=self.repo_name,
             link="http://",
@@ -91,4 +95,4 @@ class GitRepo(object):
             language="zh-TW",
             lastBuildDate=datetime.datetime.now(),
             items=feed_items)
-        return feed.rss().decode("utf-8")
+        return to_utf8(feed.rss())

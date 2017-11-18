@@ -2,7 +2,6 @@
 """
 Helper functions for dealing with utf8.
 """
-from __future__ import print_function
 import logging
 
 

@@ -7,7 +7,7 @@ import argparse
 import io
 import os
 import sys
-from . import GitRepo
+from gitrss import GitRepoRSSGenerator
 
 
 def gen_rss(repo_path, output_file):
@@ -16,8 +16,8 @@ def gen_rss(repo_path, output_file):
     repo_path -- A git repository path.
     output_file -- The rss file that is written to.
     """
-    git_repo = GitRepo(os.path.normpath(repo_path))
-    rss_contents = git_repo.to_rss()
+    generator = GitRepoRSSGenerator(os.path.normpath(repo_path))
+    rss_contents = generator.to_rss()
 
     if os.path.isdir(output_file):
         output_file = os.path.join(output_file, "rss.xml")
