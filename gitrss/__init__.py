@@ -11,7 +11,6 @@ from .rfeed import Item, Feed
 from . import shell_util
 from . import html_helper
 from . import unified_diff
-from .git_commit import GitCommit
 
 
 def _detect_repo_basedir(repo_path):
