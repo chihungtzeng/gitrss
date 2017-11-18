@@ -3,9 +3,9 @@ Handle Unified diff and produce html.
 """
 
 from __future__ import print_function
-import html_helper
 import re
 import sys
+from gitrss import html_helper
 
 
 class UnifiedDiffTrunk(object):
@@ -112,7 +112,8 @@ class UnifiedDiffTrunk(object):
 
     def _format_to_html_general(self, table_attrs, lineno_attrs,
                                 neutral_attrs, minus_attrs, plus_attrs):
-        """General method to produce diff table. The css styles are given by
+        """
+        General method to produce diff table. The css styles are given by
         callers.
         """
         lineno_old, len_old, lineno_new, len_new = self.diff_at()

@@ -3,14 +3,12 @@ Handles high level queries over a git repository.
 """
 from __future__ import print_function, absolute_import
 import os
-import time
 import datetime
 import git
-from jinja2 import Template
-from .rfeed import Item, Feed
-from . import shell_util
+from gitrss.rfeed import Item, Feed
+from gitrss import shell_util
+from gitrss import unified_diff
 from gitrss.html_helper import escape_html_char
-from . import unified_diff
 
 
 def _detect_repo_basedir(repo_path):
@@ -62,19 +60,11 @@ class GitRepo(object):
         cmd = ["git", "diff", "-U5", sha1 + "^", sha1]
         return shell_util.run_command(cmd, cwd=self.repo_path)
 
-    def _get_subject(self, message):
-        """
-        Return the subject of the commit. The subject is the first line of
-        the commit message.
-        """
-        return message.splitlines()[0]
-
     def __get_feed_item_description(self, commit):
         diff = self.get_unified_diff(commit.hexsha)
         diff_in_html = unified_diff.GitPatch(diff).format_to_html()
         escaped_msg = escape_html_char(commit.message)
         text = u"<pre>{}</pre>{}".format(escaped_msg, diff_in_html)
-        print(text)
         return text
 
     def _gen_feed_item(self, commit):
@@ -83,7 +73,7 @@ class GitRepo(object):
         data/rss_template.xml for the dict fields.
         """
         feed_item = Item(
-            title=self._get_subject(commit.message),
+            title=commit.message.splitlines()[0],
             author=commit.author.name,
             pubDate=datetime.datetime.fromtimestamp(commit.committed_date),
             description=self.__get_feed_item_description(commit))

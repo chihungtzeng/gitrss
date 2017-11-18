@@ -2,13 +2,8 @@
 Helper functions for generating html contents.
 """
 from __future__ import absolute_import, unicode_literals
-import io
-import logging
 import os
-import pprint
-import sys
-from jinja2 import Template
-from utf8_utils import to_utf8
+from gitrss.utf8_utils import to_utf8
 
 HTML_ESCAPE_MAP = {
     "&": "&amp;",
@@ -27,18 +22,6 @@ def _get_data_path():
     return os.path.join(cur_path, "data")
 
 
-def _get_template_contents():
-    """
-    Return the contents of rss template file.
-    """
-    data_path = _get_data_path()
-    template = os.path.join(data_path, "rss_template.xml")
-    logging.info("Read RSS template from {}".format(template))
-    with io.open(template, encoding="utf-8") as _fp:
-        contents = _fp.read()
-    return contents
-
-
 def escape_html_char(text):
     """
     Replace the chars such as < with &lt and > with &gt because these chars
@@ -52,15 +35,6 @@ def escape_html_char(text):
     for char in text:
         res.append(HTML_ESCAPE_MAP.get(char, char))
     return u"".join(res)
-
-
-def gen_rss_contents(channel, rss_entries):
-    """
-    Generate rss file contents.
-    """
-    template = Template(_get_template_contents())
-    renderer = getattr(template, "render")
-    return renderer(channel=channel, rss_entries=rss_entries)
 
 
 def open_tag(tag, attrs=None):
