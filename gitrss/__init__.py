@@ -9,7 +9,7 @@ import git
 from jinja2 import Template
 from .rfeed import Item, Feed
 from . import shell_util
-from . import html_helper
+from gitrss.html_helper import escape_html_char
 from . import unified_diff
 
 
@@ -69,17 +69,24 @@ class GitRepo(object):
         """
         return message.splitlines()[0]
 
+    def __get_feed_item_description(self, commit):
+        diff = self.get_unified_diff(commit.hexsha)
+        diff_in_html = unified_diff.GitPatch(diff).format_to_html()
+        escaped_msg = escape_html_char(commit.message)
+        text = u"<pre>{}</pre>{}".format(escaped_msg, diff_in_html)
+        print(text)
+        return text
+
     def _gen_feed_item(self, commit):
         """
         Return a dict that represents an rss entry. See
         data/rss_template.xml for the dict fields.
         """
-        diff = self.get_unified_diff(commit.hexsha)
         feed_item = Item(
             title=self._get_subject(commit.message),
             author=commit.author.name,
             pubDate=datetime.datetime.fromtimestamp(commit.committed_date),
-            description=unified_diff.GitPatch(diff).format_to_html())
+            description=self.__get_feed_item_description(commit))
         return feed_item
 
     def to_rss(self):
@@ -94,4 +101,4 @@ class GitRepo(object):
             language="zh-TW",
             lastBuildDate=datetime.datetime.now(),
             items=feed_items)
-        return unicode(feed.rss())
+        return feed.rss().decode("utf-8")
