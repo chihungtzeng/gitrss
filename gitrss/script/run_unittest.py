@@ -51,17 +51,12 @@ def get_unittests():
 def main():
     """Executable entry"""
     os.environ["PYTHONPATH"] = ":".join(get_possible_src_paths())
-    print(os.environ["PYTHONPATH"])
+    print(u"PYTHONPATH={}".format(os.environ["PYTHONPATH"]))
     commit_files = get_commit_files()
-
-    # unittest_jieba_helper.py takes time to run.
-    slow_tests = ["jieba_helper.py"]
 
     for _ut in get_unittests():
         _, base_name = os.path.split(_ut)
         src = base_name.replace("unittest_", "")
-        if src in slow_tests:
-            continue
         cmd = ["python", _ut]
         print(" ".join(cmd))
         try:

@@ -2,7 +2,7 @@
 Unit test for html_helper.py
 """
 
-from gitlog2rss.html_helper import (escape_html_char, gen_rss_contents)
+from gitrss.html_helper import (escape_html_char, gen_rss_contents)
 import unittest
 
 
