@@ -4,6 +4,7 @@ set -e
 readonly repo_dir=$(readlink -e .)
 readonly repo_name=$(basename ${repo_dir})
 readonly script_dir=${repo_dir}/${repo_name}/script
+export PYTHONPATH=${repo_dir}:${repo_dir}/${repo_name}
 
 # Coding style check
 python ${script_dir}/py_check.py
