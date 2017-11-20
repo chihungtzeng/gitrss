@@ -21,4 +21,3 @@ def run_command(cmd, cwd=None):
         return subprocess.check_output(cmd, cwd=cwd)
     except subprocess.CalledProcessError:
         logging.info("The command " + " ".join(cmd) + " returns non-zero code")
-        sys.exit(1)

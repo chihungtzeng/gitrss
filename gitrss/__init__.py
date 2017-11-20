@@ -65,8 +65,11 @@ class GitRepoRSSGenerator(object):
         return shell_util.run_command(cmd, cwd=self.repo_path)
 
     def __get_feed_item_description(self, commit):
-        diff = self.__get_unified_diff(commit.hexsha)
-        diff_in_html = unified_diff.GitPatch(diff).format_to_html()
+        if commit.parents:
+            diff = self.__get_unified_diff(commit.hexsha)
+            diff_in_html = unified_diff.GitPatch(diff).format_to_html()
+        else:
+            diff_in_html = ""
         escaped_msg = escape_html_char(commit.message)
         text = u"<pre>{}</pre>{}".format(escaped_msg, diff_in_html)
         return text
