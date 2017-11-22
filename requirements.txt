@@ -1,0 +1,2 @@
+GitPython>=2.1.7
+rfeed>=1.1.1
