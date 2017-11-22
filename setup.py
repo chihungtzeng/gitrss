@@ -16,7 +16,7 @@ def main():
         author="Chih-Hung Tseng",
         author_email="chihungtzeng@gmail.com",
         description="Generate RSS feeds for recent git commits.",
-        license="GLGPL v3",
+        license="LGPL v3",
         keywords="git rss",
         url="https://github.com/chihungtzeng/gitrss.git",
         platforms=["unix", "linux", "osx", "cygwin"],
