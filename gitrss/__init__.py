@@ -5,7 +5,7 @@ from __future__ import print_function, absolute_import
 import os
 import datetime
 import git
-from gitrss.rfeed import Item, Feed
+from rfeed import Item, Feed
 from gitrss import shell_util
 from gitrss import unified_diff
 from gitrss.html_helper import escape_html_char
