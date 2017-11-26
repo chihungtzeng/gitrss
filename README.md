@@ -15,9 +15,9 @@ GitPython and rfeed are required. People can use
 ```
 pip -r requirements.txt --user
 ```
-to installed them in the local directory.
+to install them in the local directory.
 
-### Installing
+### Installation
 
 Run the following command:
 ```
