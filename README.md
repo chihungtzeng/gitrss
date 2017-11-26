@@ -13,8 +13,9 @@ python -m gitrss --repo /path/to/repo --output-file /tmp/repo_name.xml
 
 GitPython and rfeed are required. People can use
 ```
-pip -r requirements.txt --user to installed them in the local directory.
+pip -r requirements.txt --user
 ```
+to installed them in the local directory.
 
 ### Installing
 
