@@ -1,4 +1,4 @@
-# gitrss
+## gitrss
 
 gitrss can be used to monitor development activities in git repositories by generating rss feeds. Feed item include commit messages and diff.
 
