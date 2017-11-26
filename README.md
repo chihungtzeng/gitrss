@@ -1,6 +1,6 @@
 ## gitrss
 
-gitrss can be used to monitor development activities in git repositories by generating rss feeds. Feed item include commit messages and diff.
+gitrss can be used to monitor development activities in git repositories by generating rss feeds. Feed items include commit messages and diff.
 
 ## Getting Started
 
